@@ -3,7 +3,7 @@ package com.yondu.project.healthmescanner.ui.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.yondu.project.apphealthme.http.Wrapper
+import com.yondu.project.healthmescanner.http.Wrapper
 import com.yondu.project.healthmescanner.data.body.LoginBody
 import com.yondu.project.healthmescanner.data.repository.UserRepository
 import com.yondu.project.healthmescanner.data.response.LoginResponse

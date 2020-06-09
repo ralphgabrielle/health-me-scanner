@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HealthME</string>
+    <string name="app_name">HealthME Scanner</string>
 
 
     <string name="header_otp">Enter One-Time Pin</string>

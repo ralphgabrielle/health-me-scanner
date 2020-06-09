@@ -1,10 +1,9 @@
 package com.yondu.project.healthmescanner.http
 
-import com.yondu.project.apphealthme.http.BodyInterceptor
-import com.yondu.project.apphealthme.http.Wrapper
 import com.yondu.project.healthmescanner.BuildConfig
+import com.yondu.project.healthmescanner.data.body.LogBody
 import com.yondu.project.healthmescanner.data.body.LoginBody
-import com.yondu.project.healthmescanner.data.local.Token
+import com.yondu.project.healthmescanner.data.response.LoginResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -15,8 +14,13 @@ import java.util.concurrent.TimeUnit
 
 interface AppNetworkService {
 
-    @POST("api/login")
-    suspend fun login(@Body loginBody: LoginBody): Wrapper<Token>
+    @POST("api/locations/verify")
+    suspend fun login(@Body loginBody: LoginBody): Wrapper<LoginResponse>
+
+
+    @POST("api/locations/profile")
+    suspend fun logAttendance(@Body logBody: LogBody): Wrapper<Any>
+
 
     companion object {
         operator fun invoke(): AppNetworkService {

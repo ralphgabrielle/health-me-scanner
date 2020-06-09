@@ -1,7 +1,8 @@
 package com.yondu.project.healthmescanner.data.repository
 
 import androidx.lifecycle.LiveData
-import com.yondu.project.apphealthme.http.Wrapper
+import com.yondu.project.healthmescanner.http.Wrapper
+import com.yondu.project.healthmescanner.data.body.LogBody
 import com.yondu.project.healthmescanner.data.body.LoginBody
 import com.yondu.project.healthmescanner.data.db.user.User
 import com.yondu.project.healthmescanner.data.response.LoginResponse
@@ -19,4 +20,6 @@ interface UserRepository {
     fun saveUser(user: User): Completable
 
     suspend fun login(loginBody: LoginBody): LiveData<out Wrapper<LoginResponse>>
+
+    suspend fun logAttendance(logBody: LogBody): LiveData<out Wrapper<Any>>
 }

@@ -44,6 +44,7 @@
                 android:id="@+id/etLocationCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:background="@null"
                 android:fontFamily="@font/proxima_nova_medium"
                 android:hint=""
@@ -57,22 +58,6 @@
                 android:layout_height="1dp"
                 android:background="@color/primary_text_color" />
         </LinearLayout>
-
-        <Button
-            android:id="@+id/bTest"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_normal"
-            android:layout_marginTop="@dimen/margin_normal"
-            android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginBottom="@dimen/margin_normal"
-            android:background="@drawable/ripple_accent_border"
-            android:fontFamily="@font/proxima_nova_bold"
-            android:text="Test"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            android:visibility="gone" />
 
         <Button
             android:id="@+id/bNext"

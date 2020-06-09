@@ -1,4 +1,4 @@
-package com.yondu.project.apphealthme.http
+package com.yondu.project.healthmescanner.http
 
 import okhttp3.Interceptor
 import okhttp3.Response

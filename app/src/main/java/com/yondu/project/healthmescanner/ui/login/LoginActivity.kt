@@ -1,11 +1,9 @@
 package com.yondu.project.healthmescanner.ui.login
 
 import android.Manifest
-import android.view.View
 import androidx.lifecycle.Observer
 import com.yondu.project.healthmescanner.R
 import com.yondu.project.healthmescanner.base.BaseActivity
-import com.yondu.project.healthmescanner.data.response.LoginResponse
 import com.yondu.project.healthmescanner.extras.catchError
 import com.yondu.project.healthmescanner.extras.confirmOK
 import com.yondu.project.healthmescanner.extras.readString
@@ -14,6 +12,7 @@ import com.yondu.project.healthmescanner.ui.MainActivity
 import com.yondu.project.healthmescanner.util.Constant.REQUEST_QR_CODE
 import com.yondu.project.healthmescanner.util.DeviceUtil
 import com.yondu.project.healthmescanner.util.PermissionAccessManager
+import com.yondu.project.healthmescanner.util.PreferenceManager
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +27,8 @@ import org.koin.android.ext.android.inject
 class LoginActivity : BaseActivity(), PermissionAccessManager.AccessPermission {
 
     private val viewModel: LoginViewModel by inject()
+    private val preferenceManager: PreferenceManager by inject()
+
     private lateinit var permissionManageAccessManager: PermissionAccessManager
 
     private val cameraPermission = arrayOf(
@@ -49,6 +50,11 @@ class LoginActivity : BaseActivity(), PermissionAccessManager.AccessPermission {
     }
 
     private fun observeEvents() {
+        if (!preferenceManager.getLocationId().isNullOrEmpty()) {
+            openQRSCan()
+        }
+
+
         viewModel.accountValidationError.observe(this, Observer {
             it?: return@Observer
 
@@ -63,8 +69,6 @@ class LoginActivity : BaseActivity(), PermissionAccessManager.AccessPermission {
     }
 
     private fun listenUserEvents() {
-        bTest.visibility = View.GONE
-
         bNext.setOnClickListener {
             connectDevice()
         }
@@ -89,8 +93,16 @@ class LoginActivity : BaseActivity(), PermissionAccessManager.AccessPermission {
             viewModel.login(locationId).observe(this@LoginActivity, Observer {
                 it ?: return@Observer
 
-                saveLocationId(it.objectData)
-                proceedToQRScan()
+                dialog.dismiss()
+
+                if (it.message.isEmpty() || it.message == "Location verified.") {
+                    saveLocationId(locationId)
+                    proceedToQRScan()
+                } else {
+                    confirmOK(it.message, "Error") {
+                        okButton { }
+                    }
+                }
             })
         } catch (ex: Exception) {
             dialog.dismiss()
@@ -114,30 +126,25 @@ class LoginActivity : BaseActivity(), PermissionAccessManager.AccessPermission {
         )
     }
 
-    private fun saveLocationId(loginResponse: LoginResponse?) {
-        loginResponse?.let {
-
-        }
+    private fun saveLocationId(locationId: String) {
+        preferenceManager.saveLocationId(locationId)
     }
 
     private fun proceedToQRScan() {
         if (DeviceUtil.isMarshmallowOrAbove()) {
             askCameraPermission()
         } else {
-            startActivity(
-                intentFor<MainActivity>()
-                    .clearTask()
-                    .newTask()
-            )
+            openQRSCan()
         }
+    }
+
+    private fun openQRSCan() {
+        startActivity<MainActivity>()
     }
 
     private fun askCameraPermission() {
         if (permissionManageAccessManager.isAllPermissionGranted()) {
-            startActivity(
-                intentFor<MainActivity>()
-                    .clearTask()
-                    .newTask())
+            openQRSCan()
         } else {
             permissionManageAccessManager.checkPermission()
         }

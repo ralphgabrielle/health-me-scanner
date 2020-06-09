@@ -1,6 +1,6 @@
-package com.yondu.project.apphealthme.http
+package com.yondu.project.healthmescanner.http
 
-import com.yondu.project.apphealthme.extras.emptyString
+import com.yondu.project.healthmescanner.extras.emptyString
 
 
 /**
