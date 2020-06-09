@@ -7,6 +7,10 @@ import com.yondu.project.healthmescanner.base.BaseActivity
 import com.yondu.project.healthmescanner.ui.log.LogActivity
 import com.yondu.project.healthmescanner.util.PreferenceManager
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.*
+import org.jetbrains.anko.clearTask
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.newTask
 import org.jetbrains.anko.startActivity
 import org.koin.android.ext.android.inject
 
@@ -20,8 +24,23 @@ class MainActivity : BaseActivity(), QRCodeReaderView.OnQRCodeReadListener {
     override val hasBackButton: Boolean
         get() = true
 
+    override val headerTitle: Int?
+        get() = R.string.header_qr
+
     override fun viewCreated() {
         qrCode.setOnQRCodeReadListener(this)
+
+        CoroutineScope(Dispatchers.IO).launch {
+
+            // delay 3 seconds
+            delay(3000)
+
+            withContext(Dispatchers.Main) {
+                startActivity<LogActivity>(
+                    "QR" to "5ed3a25a0f7a6f702b29bf33"
+                )
+            }
+        }
     }
 
     override fun onResume() {

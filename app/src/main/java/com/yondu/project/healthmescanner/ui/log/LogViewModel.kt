@@ -13,8 +13,8 @@ import com.yondu.project.healthmescanner.data.repository.UserRepository
 class LogViewModel(private var userRepository: UserRepository
 ): ViewModel() {
 
-    suspend fun logAttendance(logType: LogType, locationId: String): LiveData<out Wrapper<Any>> {
-        val logBody = LogBody(logType.name, locationId)
+    suspend fun logAttendance(qrCode: String, logType: LogType, locationId: String): LiveData<out Wrapper<Any>> {
+        val logBody = LogBody(qrCode, logType.mode, locationId)
         return userRepository.logAttendance(logBody)
     }
 

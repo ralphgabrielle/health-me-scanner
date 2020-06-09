@@ -5,6 +5,7 @@ import com.yondu.project.healthmescanner.R
 import com.yondu.project.healthmescanner.base.BaseActivity
 import com.yondu.project.healthmescanner.extras.catchError
 import com.yondu.project.healthmescanner.extras.confirmOK
+import com.yondu.project.healthmescanner.util.PreferenceManager
 import kotlinx.android.synthetic.main.activity_log.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +21,11 @@ import java.lang.Exception
 
 class LogActivity: BaseActivity() {
 
+    private val preferenceManager: PreferenceManager by inject()
     private val viewModel: LogViewModel by inject()
+
+    override val hasBackButton: Boolean
+        get() = true
 
     override val layoutId: Int?
         get() =  R.layout.activity_log
@@ -49,30 +54,35 @@ class LogActivity: BaseActivity() {
             dialog.setCancelable(false)
             dialog.show()
 
-            viewModel.logAttendance(logType, "100").observe(this@LogActivity, Observer {
-                it?: return@Observer
+            val qrCode = intent.getStringExtra("QR")!!
 
+            preferenceManager.getLocationId()?.let { location ->
+                viewModel.logAttendance(qrCode, logType, location).observe(this@LogActivity, Observer {
+                    it?: return@Observer
 
-            })
+                    dialog.dismiss()
+                    success()
+                })
+            }
         } catch (ex: Exception) {
             dialog.dismiss()
             catchError(ex) {
-                confirmOK("There was an error, please try", "Error") {
-                    okButton { }
-                }
+                finish()
             }
         }
     }
 
     private fun success() {
-        confirmOK("Your attendance log has been sent successfully", "Success") {
-            okButton {
-                finish()
-            }
-        }
+//        confirmOK("Your attendance log has been sent successfully", "Success") {
+//            okButton {
+//                finish()
+//            }
+//        }
+
+        finish()
     }
 }
 
-enum class LogType {
-    TIME_IN, TIME_OUT
+enum class LogType(val mode: String) {
+    TIME_IN("INBOUND"), TIME_OUT("OUTBOUND")
 }
