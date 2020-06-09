@@ -95,7 +95,7 @@ class LoginActivity : BaseActivity(), PermissionAccessManager.AccessPermission {
 
                 dialog.dismiss()
 
-                if (it.message.isEmpty() || it.message == "Location verified.") {
+                if (it.message.isEmpty() || it.message == "Location verified." || it.message == "Success") {
                     saveLocationId(locationId)
                     proceedToQRScan()
                 } else {

@@ -66,9 +66,7 @@ class LogActivity: BaseActivity() {
             }
         } catch (ex: Exception) {
             dialog.dismiss()
-            catchError(ex) {
-                finish()
-            }
+            finish()
         }
     }
 
